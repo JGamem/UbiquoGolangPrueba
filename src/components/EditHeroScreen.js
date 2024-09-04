@@ -1,5 +1,42 @@
 import React, { useState, useEffect } from 'react';
 
+const PUBLISHERS = {
+    1: 'ABC Studios',
+    2: 'Dark Horse Comics',
+    3: 'DC Comics',
+    4: 'George Lucas',
+    5: 'HarperCollins',
+    6: 'Icon Comics',
+    7: 'IDW Publishing',
+    8: 'Image Comics',
+    9: 'J. K. Rowling',
+    10: 'J. R. R. Tolkien',
+    11: 'Marvel Comics',
+    12: 'Microsoft',
+    13: 'NBC - Heroes',
+    14: 'Rebellion',
+    15: 'Shueisha',
+    16: 'Sony Pictures',
+    17: 'South Park',
+    18: 'Star Trek',
+    19: 'SyFy',
+    20: 'Team Epic TV',
+    21: 'Titan Books',
+    22: 'Wildstorm',
+    23: 'Universal Studios',
+    24: 'N/A'
+};
+
+const GENDERS = {
+    1: 'Masculino',
+    2: 'Femenino'
+};
+
+const ALIGNMENTS = {
+    1: 'Bueno',
+    2: 'Malo'
+};
+
 const EditHeroScreen = ({ hero, onUpdateHero, onCancel }) => {
     const [updatedHero, setUpdatedHero] = useState({ ...hero });
     const [errors, setErrors] = useState({});
@@ -19,7 +56,7 @@ const EditHeroScreen = ({ hero, onUpdateHero, onCancel }) => {
     const validateForm = () => {
         let formErrors = {};
         if (!updatedHero.name.trim()) formErrors.name = 'El nombre es requerido';
-        if (!updatedHero.publisher.trim()) formErrors.publisher = 'La casa publicadora es requerida';
+        if (!updatedHero.publisher) formErrors.publisher = 'La casa publicadora es requerida';
         if (!updatedHero.race.trim()) formErrors.race = 'La raza es requerida';
         if (!updatedHero.gender) formErrors.gender = 'El género es requerido';
         if (!updatedHero.height) formErrors.height = 'La altura es requerida';
@@ -36,18 +73,38 @@ const EditHeroScreen = ({ hero, onUpdateHero, onCancel }) => {
             onUpdateHero({
                 ...updatedHero,
                 height: Number(updatedHero.height),
-                weight: Number(updatedHero.weight)
+                weight: Number(updatedHero.weight),
+                publisher: parseInt(updatedHero.publisher, 10),
+                gender: parseInt(updatedHero.gender, 10),
+                alignment: parseInt(updatedHero.alignment, 10)
             });
         } else {
             setErrors(formErrors);
         }
     };
 
+    const getPublisherOptions = () => {
+        return Object.entries(PUBLISHERS).map(([id, name]) => (
+            <option key={id} value={id}>{name}</option>
+        ));
+    };
+
+    const getGenderOptions = () => {
+        return Object.entries(GENDERS).map(([id, name]) => (
+            <option key={id} value={id}>{name}</option>
+        ));
+    };
+
+    const getAlignmentOptions = () => {
+        return Object.entries(ALIGNMENTS).map(([id, name]) => (
+            <option key={id} value={id}>{name}</option>
+        ));
+    };
+
     return (
         <div className="hero-form">
             <h2 className="hero-gradient" style={{ textAlign: 'center', marginBottom: '30px', fontSize: '2.5em' }}>Editar Héroe</h2>
             <form onSubmit={handleSubmit}>
-                {/* Form fields here */}
                 <div style={{ marginBottom: '20px' }}>
                     <label htmlFor="name" style={{ display: 'block', marginBottom: '8px' }}>Nombre:</label>
                     <input
@@ -63,15 +120,17 @@ const EditHeroScreen = ({ hero, onUpdateHero, onCancel }) => {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <label htmlFor="publisher" style={{ display: 'block', marginBottom: '8px' }}>Casa publicadora:</label>
-                    <input
-                        className="hero-input"
-                        type="text"
+                    <select
+                        className="hero-select"
                         id="publisher"
                         name="publisher"
                         value={updatedHero.publisher}
                         onChange={handleChange}
                         style={{ width: '100%' }}
-                    />
+                    >
+                        <option value="">Seleccionar casa publicadora</option>
+                        {getPublisherOptions()}
+                    </select>
                     {errors.publisher && <span style={{ color: '#ff4500', fontSize: '0.9em' }}>{errors.publisher}</span>}
                 </div>
                 <div style={{ marginBottom: '20px' }}>
@@ -98,8 +157,7 @@ const EditHeroScreen = ({ hero, onUpdateHero, onCancel }) => {
                         style={{ width: '100%' }}
                     >
                         <option value="">Seleccionar género</option>
-                        <option value="Male">Masculino</option>
-                        <option value="Female">Femenino</option>
+                        {getGenderOptions()}
                     </select>
                     {errors.gender && <span style={{ color: '#ff4500', fontSize: '0.9em' }}>{errors.gender}</span>}
                 </div>
@@ -114,8 +172,7 @@ const EditHeroScreen = ({ hero, onUpdateHero, onCancel }) => {
                         style={{ width: '100%' }}
                     >
                         <option value="">Seleccionar bando</option>
-                        <option value="good">Bueno</option>
-                        <option value="bad">Malo</option>
+                        {getAlignmentOptions()}
                     </select>
                 </div>
                 <div style={{ marginBottom: '20px' }}>
