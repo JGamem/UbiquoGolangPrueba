@@ -251,9 +251,9 @@ const CreateHeroScreen = ({ onCreateHero, onCancel }) => {
                     />
                     {errors.skin_color && <span style={{ color: '#ff4500', fontSize: '0.9em' }}>{errors.skin_color}</span>}
                 </div>
-                <div style={{ textAlign: 'center', marginTop: '30px' }}>
-                    <button type="submit" className="hero-button" style={{ marginRight: '15px' }}>Crear</button>
-                    <button type="button" className="hero-button hero-button-cancel" onClick={onCancel}>Cancelar</button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}>
+                    <button type="submit" className="hero-button" style={{ backgroundColor: '#00FF00', color: '#fff' }}>Crear Héroe</button>
+                    <button type="button" className="hero-button" style={{ backgroundColor: '#FF0000', color: '#fff' }} onClick={onCancel}>Cancelar</button>
                 </div>
             </form>
         </div>
